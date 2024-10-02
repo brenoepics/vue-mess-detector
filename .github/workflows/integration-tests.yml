@@ -192,8 +192,7 @@ jobs:
         working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
-            pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind)
             pnpm add file:../package/ -D
             pnpm install
             pnpm vue-mess-detector analyze ./
@@ -204,14 +203,12 @@ jobs:
             yarn install
             yarn vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
-            bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind)
             bun add file:../package/ --dev
             bun install --ignore-scripts
             bun run vue-mess-detector analyze ./
           else
-            npx nuxi@latest init test-repo --package-manager npm --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && npx nuxi@latest init test-repo --package-manager npm --git-init -t themes/content-wind)
             npm install file:../package/ --save-dev
             npm install
             npx vue-mess-detector analyze ./
@@ -222,8 +219,7 @@ jobs:
         working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
-            pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind)
             pnpm add file:../package/ -D
             pnpm install
             pnpm vue-mess-detector analyze ./
@@ -234,14 +230,12 @@ jobs:
             yarn install
             yarn vue-mess-detector analyze ./
           } elseif ($Env:matrix_package_manager -eq 'bun') {
-            bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind)
             bun add file:../package/ --dev
             bun install --ignore-scripts
             bun run vue-mess-detector analyze ./
           } else {
-            npx nuxi@latest init test-repo --package-manager npm --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && npx nuxi@latest init test-repo --package-manager npm --git-init -t themes/content-wind)
             npm install file:../package/ --save-dev
             npm install
             npx vue-mess-detector analyze ./
