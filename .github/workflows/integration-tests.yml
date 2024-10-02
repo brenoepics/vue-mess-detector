@@ -14,14 +14,10 @@ permissions:
 
 jobs:
   test-vue-mess-detector:
-    runs-on: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.platform }}
     strategy:
       matrix:
-        include:
-          - platform: 'macos-latest'
-          - platform: 'ubuntu-latest'
-          - platform: 'windows-latest'
-        runs-on: ${{ matrix.platform }}
+        platform: [ 'macos-latest', 'ubuntu-latest', 'windows-latest' ]
         package-manager: [ npm, yarn, pnpm, bun ]
 
     name: Test Vue Mess Detector with ${{ matrix.package-manager }} on ${{ matrix.platform }}
