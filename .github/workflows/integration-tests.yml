@@ -13,23 +13,48 @@ permissions:
   contents: read
 
 jobs:
+  build-vue-mess-detector:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build package
+        run: yarn build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vue-mess-detector
+          path: ./dist
+
   test-vue-mess-detector:
     runs-on: ${{ matrix.platform }}
+    needs: build-vue-mess-detector
 
     strategy:
       matrix:
         platform: [ 'macos-latest', 'ubuntu-latest', 'windows-latest' ]
         package-manager: [ npm, yarn, pnpm, bun ]
 
-    name: Test Vue Mess Detector with ${{ matrix.package-manager }} on ${{ matrix.platform }}
+    name: Testing with ${{ matrix.package-manager }} on ${{ matrix.platform }}
     steps:
       - name: Create package directory
         run: mkdir ./package
 
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          path: './package'
+          name: vue-mess-detector
+          path: ./package
 
       - name: Create test-repo directory
         run: mkdir ./test-repo
@@ -96,16 +121,16 @@ jobs:
         working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
-              pnpm add vue-mess-detector -D
+              pnpm add file:../package/vue-mess-detector-*.tgz -D
               pnpm vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
-              yarn add vue-mess-detector -D
+              yarn add file:../package/vue-mess-detector-*.tgz -D
               yarn vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
-              bun add vue-mess-detector --dev
+              bun add file:../package/vue-mess-detector-*.tgz --dev
               bunx vue-mess-detector analyze
           else
-              npm install vue-mess-detector --save-dev
+              npm install file:../package/vue-mess-detector-*.tgz --save-dev
               npx vue-mess-detector analyze
           fi
 
@@ -114,15 +139,15 @@ jobs:
         working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
-              pnpm add vue-mess-detector -D
+              pnpm add file:../package/vue-mess-detector-*.tgz -D
               pnpm vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
-              yarn add vue-mess-detector -D
+              yarn add file:../package/vue-mess-detector-*.tgz -D
               yarn vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'bun') {
-            bun add vue-mess-detector --dev
+            bun add file:../package/vue-mess-detector-*.tgz --dev
             bunx vue-mess-detector analyze
           } else {
-            npm install vue-mess-detector --save-dev
+            npm install file:../package/vue-mess-detector-*.tgz --save-dev
             npx vue-mess-detector analyze
           }
