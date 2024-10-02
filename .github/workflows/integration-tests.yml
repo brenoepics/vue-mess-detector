@@ -93,7 +93,6 @@ jobs:
 
       - name: Run Vue Mess Detector (Linux/Mac)
         if: runner.os != 'Windows'
-        id: vmd
         working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
@@ -111,7 +110,6 @@ jobs:
 
       - name: Run Vue Mess Detector (Windows)
         if: runner.os == 'Windows'
-        id: vmd
         working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
