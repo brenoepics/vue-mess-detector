@@ -34,7 +34,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vue-mess-detector
-          path: ./dist
+          path: |
+            ./package.json
+            ./dist
+          retention-days: 1
 
   test-vue-mess-detector:
     runs-on: ${{ matrix.platform }}
@@ -121,16 +124,16 @@ jobs:
         working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
-              pnpm add file:../package/vue-mess-detector-*.tgz -D
+              pnpm add file:../package/vue-mess-detector/ -D
               pnpm vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
-              yarn add file:../package/vue-mess-detector-*.tgz -D
+              yarn add file:../package/vue-mess-detector/ -D
               yarn vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
-              bun add file:../package/vue-mess-detector-*.tgz --dev
+              bun add file:../package/vue-mess-detector/ --dev
               bunx vue-mess-detector analyze
           else
-              npm install file:../package/vue-mess-detector-*.tgz --save-dev
+              npm install file:../package/vue-mess-detector/ --save-dev
               npx vue-mess-detector analyze
           fi
 
@@ -139,15 +142,15 @@ jobs:
         working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
-              pnpm add file:../package/vue-mess-detector-*.tgz -D
+              pnpm add file:../package/vue-mess-detector/ -D
               pnpm vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
-              yarn add file:../package/vue-mess-detector-*.tgz -D
+              yarn add file:../package/vue-mess-detector/ -D
               yarn vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'bun') {
-            bun add file:../package/vue-mess-detector-*.tgz --dev
+            bun add file:../package/vue-mess-detector/ --dev
             bunx vue-mess-detector analyze
           } else {
-            npm install file:../package/vue-mess-detector-*.tgz --save-dev
+            npm install file:../package/vue-mess-detector/ --save-dev
             npx vue-mess-detector analyze
           }
