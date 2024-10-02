@@ -38,6 +38,7 @@ jobs:
           path: |
             ./package.json
             ./dist
+            ./node_modules
             ./yarn.lock
             ./index.d.ts
 
@@ -102,7 +103,6 @@ jobs:
             yarn vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
             yes "my-package" | head -n 1 | bun create vue . --default --typescript --cwd=. --ignore-scripts
-            (cd ../package && bun install)
             bun add file:../package/ --dev
             bun install --ignore-scripts
             bun run vue-mess-detector analyze
@@ -129,7 +129,6 @@ jobs:
             yarn vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'bun') {
             echo "my-package" | bun create vue . --default --typescript --ignore-scripts
-            (cd ../package && bun install)
             bun add file:../package/ --d
             bun install --ignore-scripts
             bun run vue-mess-detector analyze
