@@ -188,7 +188,7 @@ jobs:
             cd ./test-repo && pnpm add file:../package/ -D && pnpm install && pnpm vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
             yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind
-            (cd ./test-repo && yarn add file:../package/ -D && yarn install && yarn vue-mess-detector analyze ./)
+            (cd ./test-repo && yarn --cwd . add file:../package/ -D && yarn --cwd . install && yarn --cwd . vue-mess-detector analyze ./)
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
             bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind
             cd ./test-repo && bun add file:../package/ --dev && bun install --ignore-scripts && bun run vue-mess-detector analyze ./
