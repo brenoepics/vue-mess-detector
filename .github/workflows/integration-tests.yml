@@ -88,3 +88,4 @@ jobs:
           else
               npm install vue-mess-detector --save-dev
               npm run vue-mess-detector analyze
+          fi
