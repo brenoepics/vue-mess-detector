@@ -92,6 +92,7 @@ jobs:
         name: Create and Run Vue Mess Detector (Linux/Mac)
         working-directory: ./test-repo
         run: |
+          set -e
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             yes "my-package" | head -n 1 | pnpm create vue@latest . --default --typescript
             pnpm add file:../package/ -D
@@ -119,6 +120,7 @@ jobs:
         name: Create and Run Vue Mess Detector (Windows)
         working-directory: ./test-repo
         run: |
+          $ErrorActionPreference = "Stop"
           if ($Env:matrix_package_manager -eq 'pnpm') {
             echo "my-package" | pnpm create vue@latest . --default --typescript
             pnpm add file:../package/ -D
@@ -163,8 +165,7 @@ jobs:
           name: vue-mess-detector
           path: ./package
 
-      - if: matrix.package-manager != 'bun'
-        name: Set up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -173,7 +174,7 @@ jobs:
         name: Check PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: '9.9.0'
+          version: 'latest'
 
       - if: matrix.package-manager == 'yarn'
         name: Check Yarn
@@ -185,12 +186,13 @@ jobs:
         name: Check Bun
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: '1.1.26'
+          bun-version: 'latest'
 
       - if: runner.os != 'Windows'
         name: Create and Run Vue Mess Detector (Linux/Mac)
         working-directory: ./test-repo
         run: |
+          set -e
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             (cd .. && pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind)
             pnpm add file:../package/ -D
@@ -218,6 +220,7 @@ jobs:
         name: Create and Run Vue Mess Detector (Windows)
         working-directory: ./test-repo
         run: |
+          $ErrorActionPreference = "Stop"
           if ($Env:matrix_package_manager -eq 'pnpm') {
             (cd .. && pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind)
             pnpm add file:../package/ -D
