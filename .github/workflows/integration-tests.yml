@@ -13,8 +13,22 @@ permissions:
   contents: read
 
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create test-repo directory
+        run: mkdir ../test-repo
+
   test-vue-mess-detector:
     runs-on: ${{ matrix.platform }}
+    needs: setup
+    defaults:
+      run:
+        working-directory: ../test-repo
+
     strategy:
       matrix:
         platform: [ 'macos-latest', 'ubuntu-latest', 'windows-latest' ]
@@ -49,21 +63,27 @@ jobs:
 
       - name: Create Vue Project
         run: |
-          mkdir ../test-repo
           cd ../test-repo
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             yes "my-package" | head -n 1 | pnpm create vue@latest . --default --typescript
-            pnpm install
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
             yes "my-package" | head -n 1 | yarn --cwd . create vue . --default --typescript
-            yarn --cwd . install
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
             yes "my-package" | head -n 1 | bun create vue . --default --typescript --cwd=. --ignore-scripts
-            bun install --cwd=. --ignore-scripts
           else
             yes "my-package" | head -n 1 | npm create vue@latest -- . --default --typescript
+
+      - name: Install dependencies
+        run: |
+          cd ../test-repo
+          if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
+            pnpm install
+          elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
+            yarn install
+          elif [ "${{ matrix.package-manager }}" == "bun" ]; then
+            bun install --ignore-scripts
+          else
             npm install
-          fi
 
       - name: Run Vue Mess Detector
         id: vmd
@@ -81,4 +101,3 @@ jobs:
           else
               npm install vue-mess-detector --save-dev
               npm run vue-mess-detector analyze
-          fi
