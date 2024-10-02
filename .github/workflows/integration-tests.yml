@@ -78,14 +78,14 @@ jobs:
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
               pnpm add vue-mess-detector -D
-              pnpm run vue-mess-detector analyze
+              pnpm vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
               yarn add vue-mess-detector -D
-              yarn run vue-mess-detector analyze
+              yarn vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
               bun add vue-mess-detector --dev
-              bun run vue-mess-detector analyze
+              bunx vue-mess-detector analyze
           else
               npm install vue-mess-detector --save-dev
-              npm run vue-mess-detector analyze
+              npx vue-mess-detector analyze
           fi
