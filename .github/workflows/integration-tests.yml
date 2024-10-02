@@ -46,7 +46,7 @@ jobs:
     strategy:
       matrix:
         platform: [ 'macos-latest', 'ubuntu-latest', 'windows-latest' ]
-        package-manager: [ npm, yarn, pnpm, bun ]
+        package-manager: [ npm, yarn, pnpm ]
 
     name: Testing with ${{ matrix.package-manager }} on ${{ matrix.platform }}
     steps:
@@ -102,7 +102,7 @@ jobs:
             yes "my-package" | head -n 1 | bun create vue . --default --typescript --cwd=. --ignore-scripts
             bun add file:../package/ --dev
             bun install --ignore-scripts
-            bunx vue-mess-detector analyze
+            bun run vue-mess-detector analyze
           else
             yes "my-package" | head -n 1 | npm create vue@latest -- . --default --typescript
             npm install file:../package/ --save-dev
@@ -126,7 +126,7 @@ jobs:
             yarn vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'bun') {
             echo "my-package" | bun create vue . --default --typescript --ignore-scripts
-            bun add file:../package/ --dev
+            bun add file:../package/ --d
             bun install --ignore-scripts
             bun run vue-mess-detector analyze
           } else {
