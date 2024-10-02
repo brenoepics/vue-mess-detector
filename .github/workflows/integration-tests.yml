@@ -99,7 +99,7 @@ jobs:
             pnpm vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
             yes "my-package" | head -n 1 | yarn --cwd . create vue . --default --typescript
-            touch ./test-repo/yarn.lock
+            touch ./yarn.lock
             yarn add file:../package/ -D
             yarn install
             yarn vue-mess-detector analyze
@@ -126,7 +126,7 @@ jobs:
             pnpm vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
             echo "my-package" | yarn create vue . --default --typescript
-            touch ./test-repo/yarn.lock
+            touch ./yarn.lock
             yarn add file:../package/ -D
             yarn install
             yarn vue-mess-detector analyze
@@ -198,7 +198,7 @@ jobs:
             pnpm vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
             yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind --dir ../
-            touch ./test-repo/yarn.lock
+            touch ./yarn.lock
             yarn add file:../package/ -D
             yarn install
             yarn vue-mess-detector analyze ./
@@ -225,7 +225,7 @@ jobs:
             pnpm vue-mess-detector analyze ./
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
             yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind --dir ../
-            touch ./test-repo/yarn.lock
+            touch ./yarn.lock
             yarn add file:../package/ -D
             yarn install
             yarn vue-mess-detector analyze ./
