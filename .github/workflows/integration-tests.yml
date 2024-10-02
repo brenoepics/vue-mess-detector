@@ -62,95 +62,76 @@ jobs:
       - name: Create test-repo directory
         run: mkdir ./test-repo
 
-      - name: Set up Node.js
+      - if: matrix.package-manager == 'bun'
+        name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Check PNPM
-        if: matrix.package-manager == 'pnpm'
+      - if: matrix.package-manager == 'pnpm'
+        name: Check PNPM
         uses: pnpm/action-setup@v4
         with:
           version: '9.9.0'
 
-      - name: Check Yarn
-        if: matrix.package-manager == 'yarn'
+      - if: matrix.package-manager == 'yarn'
+        name: Check Yarn
         run: npm install -g yarn
 
-      - name: Check Bun
-        if: matrix.package-manager == 'bun'
+      - if: matrix.package-manager == 'bun'
+        name: Check Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: '1.1.26'
 
-      - name: Create Vue Project (Linux/Mac)
-        if: runner.os != 'Windows'
+      - if: runner.os != 'Windows'
+        name: Create and Run Vue Mess Detector (Linux/Mac)
         working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             yes "my-package" | head -n 1 | pnpm create vue@latest . --default --typescript
+            pnpm add file:../package/ -D
             pnpm install
+            pnpm vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
             yes "my-package" | head -n 1 | yarn --cwd . create vue . --default --typescript
+            yarn add file:../package/ -D
             yarn install
+            yarn vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
             yes "my-package" | head -n 1 | bun create vue . --default --typescript --cwd=. --ignore-scripts
+            bun add file:../package/ --dev
             bun install --ignore-scripts
+            bunx vue-mess-detector analyze
           else
             yes "my-package" | head -n 1 | npm create vue@latest -- . --default --typescript
+            npm install file:../package/ --save-dev
             npm install
+            npx vue-mess-detector analyze
           fi
 
-      - name: Create Vue Project (Windows)
-        if: runner.os == 'Windows'
+      - if: runner.os == 'Windows'
+        name: Create and Run Vue Mess Detector (Windows)
         working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
             echo "my-package" | pnpm create vue@latest . --default --typescript
+            pnpm add file:../package/ -D
             pnpm install
+            pnpm vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
             echo "my-package" | yarn create vue . --default --typescript
+            yarn add file:../package/ -D
             yarn install
+            yarn vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'bun') {
             echo "my-package" | bun create vue . --default --typescript --ignore-scripts
-            bun install --ignore-scripts
-          } else {
-            echo "my-package" | npm create vue@latest -- . --default --typescript
-            npm install
-          }
-
-      - name: Run Vue Mess Detector (Linux/Mac)
-        if: runner.os != 'Windows'
-        working-directory: ./test-repo
-        run: |
-          if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
-              pnpm add file:../package/ -D
-              pnpm vue-mess-detector analyze
-          elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
-              yarn add file:../package/ -D
-              yarn vue-mess-detector analyze
-          elif [ "${{ matrix.package-manager }}" == "bun" ]; then
-              bun add file:../package/ --dev
-              bunx vue-mess-detector analyze
-          else
-              npm install file:../package/ --save-dev
-              npx vue-mess-detector analyze
-          fi
-
-      - name: Run Vue Mess Detector (Windows)
-        if: runner.os == 'Windows'
-        working-directory: ./test-repo
-        run: |
-          if ($Env:matrix_package_manager -eq 'pnpm') {
-              pnpm add file:../package/ -D
-              pnpm vue-mess-detector analyze
-          } elseif ($Env:matrix_package_manager -eq 'yarn') {
-              yarn add file:../package/ -D
-              yarn vue-mess-detector analyze
-          } elseif ($Env:matrix_package_manager -eq 'bun') {
             bun add file:../package/ --dev
+            bun install --ignore-scripts
             bunx vue-mess-detector analyze
           } else {
+            echo "my-package" | npm create vue@latest -- . --default --typescript
             npm install file:../package/ --save-dev
+            npm install
             npx vue-mess-detector analyze
           }
