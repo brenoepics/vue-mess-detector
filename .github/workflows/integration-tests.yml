@@ -128,7 +128,7 @@ jobs:
             echo "my-package" | bun create vue . --default --typescript --ignore-scripts
             bun add file:../package/ --dev
             bun install --ignore-scripts
-            bunx vue-mess-detector analyze
+            bun run vue-mess-detector analyze
           } else {
             echo "my-package" | npm create vue@latest -- . --default --typescript
             npm install file:../package/ --save-dev
