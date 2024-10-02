@@ -53,17 +53,16 @@ jobs:
 
     name: Testing Vue with ${{ matrix.package-manager }} on ${{ matrix.platform }}
     steps:
-      - name: Create package directory
-        run: mkdir ./package
+      - name: Create directories
+        run: |
+          mkdir ./package
+          mkdir ./test-repo
 
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: vue-mess-detector
           path: ./package
-
-      - name: Create test-repo directory
-        run: mkdir ./test-repo
 
       - if: matrix.package-manager != 'bun'
         name: Set up Node.js
@@ -149,8 +148,9 @@ jobs:
 
     name: Testing Nuxt with ${{ matrix.package-manager }} on ${{ matrix.platform }}
     steps:
-      - name: Create package directory
-        run: mkdir ./package
+      - name: Create directories
+        run: |
+          mkdir ./package
 
       - name: Download artifact
         uses: actions/download-artifact@v4
@@ -185,28 +185,16 @@ jobs:
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind
-            cd test-repo
-            pnpm add file:../package/ -D
-            pnpm install
-            pnpm vue-mess-detector analyze ./
+            cd test-repo && pnpm add file:../package/ -D && pnpm install && pnpm vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
             yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind
-            cd test-repo
-            yarn add file:../package/ -D
-            yarn install
-            yarn vue-mess-detector analyze ./
+            cd test-repo && yarn add file:../package/ -D && yarn install && yarn vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
             bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind
-            cd test-repo
-            bun add file:../package/ --dev
-            bun install --ignore-scripts
-            bun run vue-mess-detector analyze ./
+            cd test-repo && bun add file:../package/ --dev && bun install --ignore-scripts && bun run vue-mess-detector analyze ./
           else
             npx nuxi@latest init test-repo --package-manager npm --git-init -t themes/content-wind
-            cd test-repo
-            npm install file:../package/ --save-dev
-            npm install
-            npx vue-mess-detector analyze ./
+            cd test-repo && npm install file:../package/ --save-dev && npm install && npx vue-mess-detector analyze ./
           fi
 
       - if: runner.os == 'Windows'
@@ -215,26 +203,14 @@ jobs:
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
             pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind
-            cd test-repo
-            pnpm add file:../package/ -D
-            pnpm install
-            pnpm vue-mess-detector analyze ./
+            cd test-repo && pnpm add file:../package/ -D && pnpm install && pnpm vue-mess-detector analyze ./
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
             yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind
-            cd test-repo
-            yarn add file:../package/ -D
-            yarn install
-            yarn vue-mess-detector analyze ./
+            cd test-repo && yarn add file:../package/ -D && yarn install && yarn vue-mess-detector analyze ./
           } elseif ($Env:matrix_package_manager -eq 'bun') {
             bun x nuxi@latest init test-repo --package-manager bun --git-init -t themes/content-wind
-            cd test-repo
-            bun add file:../package/ --dev
-            bun install --ignore-scripts
-            bun run vue-mess-detector analyze ./
+            cd test-repo && bun add file:../package/ --dev && bun install --ignore-scripts && bun run vue-mess-detector analyze ./
           } else {
             npx nuxi@latest init test-repo --package-manager npm --git-init -t themes/content-wind
-            cd test-repo
-            npm install file:../package/ --save-dev
-            npm install
-            npx vue-mess-detector analyze ./
+            cd test-repo && npm install file:../package/ --save-dev && npm install && npx vue-mess-detector analyze ./
           }
