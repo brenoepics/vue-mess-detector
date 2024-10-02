@@ -197,8 +197,8 @@ jobs:
             pnpm install
             pnpm vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
-            (cd .. && yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind)
-            touch ./yarn.lock
+            (cd .. && yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind --no-install)
+            touch yarn.lock
             yarn add vue-mess-detector@file:../package/ -D
             yarn install
             yarn vue-mess-detector analyze ./
@@ -224,7 +224,7 @@ jobs:
             pnpm install
             pnpm vue-mess-detector analyze ./
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
-            (cd .. && yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind)
+            (cd .. && yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind --no-install)
             touch ./yarn.lock
             yarn add vue-mess-detector@file:../package/ -D
             yarn install
