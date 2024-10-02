@@ -107,6 +107,7 @@ jobs:
           else
               npm install vue-mess-detector --save-dev
               npx vue-mess-detector analyze
+          fi
 
       - name: Run Vue Mess Detector (Windows)
         if: runner.os == 'Windows'
