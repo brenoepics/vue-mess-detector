@@ -124,16 +124,16 @@ jobs:
         working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
-              pnpm add file:../package/vue-mess-detector/ -D
+              pnpm add file:../package/ -D
               pnpm vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
-              yarn add file:../package/vue-mess-detector/ -D
+              yarn add file:../package/ -D
               yarn vue-mess-detector analyze
           elif [ "${{ matrix.package-manager }}" == "bun" ]; then
-              bun add file:../package/vue-mess-detector/ --dev
+              bun add file:../package/ --dev
               bunx vue-mess-detector analyze
           else
-              npm install file:../package/vue-mess-detector/ --save-dev
+              npm install file:../package/ --save-dev
               npx vue-mess-detector analyze
           fi
 
@@ -142,15 +142,15 @@ jobs:
         working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
-              pnpm add file:../package/vue-mess-detector/ -D
+              pnpm add file:../package/ -D
               pnpm vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
-              yarn add file:../package/vue-mess-detector/ -D
+              yarn add file:../package/ -D
               yarn vue-mess-detector analyze
           } elseif ($Env:matrix_package_manager -eq 'bun') {
-            bun add file:../package/vue-mess-detector/ --dev
+            bun add file:../package/ --dev
             bunx vue-mess-detector analyze
           } else {
-            npm install file:../package/vue-mess-detector/ --save-dev
+            npm install file:../package/ --save-dev
             npx vue-mess-detector analyze
           }
