@@ -189,6 +189,7 @@ jobs:
 
       - if: runner.os != 'Windows'
         name: Create and Run Vue Mess Detector (Linux/Mac)
+        working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind 
@@ -197,8 +198,7 @@ jobs:
             pnpm install
             pnpm vue-mess-detector analyze ./
           elif [ "${{ matrix.package-manager }}" == "yarn" ]; then
-            yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind)
             touch ./yarn.lock
             yarn add vue-mess-detector@file:../package/ -D
             yarn install
@@ -219,6 +219,7 @@ jobs:
 
       - if: runner.os == 'Windows'
         name: Create and Run Vue Mess Detector (Windows)
+        working-directory: ./test-repo
         run: |
           if ($Env:matrix_package_manager -eq 'pnpm') {
             pnpm dlx nuxi@latest init test-repo --package-manager pnpm --git-init -t themes/content-wind 
@@ -227,8 +228,7 @@ jobs:
             pnpm install
             pnpm vue-mess-detector analyze ./
           } elseif ($Env:matrix_package_manager -eq 'yarn') {
-            yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind 
-            cd ./test-repo
+            (cd .. && yarn dlx nuxi@latest init test-repo --package-manager yarn --git-init -t themes/content-wind)
             touch ./yarn.lock
             yarn add vue-mess-detector@file:../package/ -D
             yarn install
