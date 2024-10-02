@@ -56,7 +56,7 @@ jobs:
           bun-version: '1.1.26'
 
       - name: Create Vue Project
-        working-directory: /test-repo
+        working-directory: ./test-repo
         run: |
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
             yes "my-package" | head -n 1 | pnpm create vue@latest . --default --typescript
@@ -74,8 +74,8 @@ jobs:
 
       - name: Run Vue Mess Detector
         id: vmd
+        working-directory: ./test-repo
         run: |
-          cd ../test-repo
           if [ "${{ matrix.package-manager }}" == "pnpm" ]; then
               pnpm add vue-mess-detector -D
               pnpm run vue-mess-detector analyze
