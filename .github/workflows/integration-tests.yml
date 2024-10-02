@@ -24,15 +24,15 @@ jobs:
     name: Test Vue Mess Detector with ${{ matrix.package-manager }} on ${{ matrix.platform }}
     steps:
       - name: Create package directory
-        run: mkdir /package
+        run: mkdir ./package
 
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: '/package'
+          path: './package'
 
       - name: Create test-repo directory
-        run: mkdir /test-repo
+        run: mkdir ./test-repo
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
