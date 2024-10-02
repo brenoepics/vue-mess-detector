@@ -24,7 +24,7 @@ jobs:
     name: Test Vue Mess Detector with ${{ matrix.package-manager }} on ${{ matrix.platform }}
     steps:
       - name: Create package directory
-        run: mkdir -p /package
+        run: mkdir /package
 
       - name: Checkout
         uses: actions/checkout@v4
