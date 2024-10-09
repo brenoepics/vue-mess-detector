@@ -2,7 +2,7 @@ name: JSR Publish
 
 on:
   release:
-    types: [ created ]
+    types: [created]
 
 jobs:
   publish:
@@ -11,14 +11,6 @@ jobs:
       contents: read
       id-token: write # The OIDC ID token is used for authentication with JSR.
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: yarn
-
-      - run: |
-          yarn install
-          npx jsr publish --allow-dirty
+      - uses: actions/checkout@v4
+      - run: yarn install
+      - run: npx jsr publish --allow-dirty
